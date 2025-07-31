@@ -21,7 +21,6 @@ export default function EventTable({
 }) {
   const { events, removeEvent, filters } = useEventManagementContext()
 
-  // Filter events
   let filteredEvents = events.filter((event) => {
     const matchesSearch =
       event.title.toLowerCase().includes(filters.search.toLowerCase()) ||
@@ -31,18 +30,21 @@ export default function EventTable({
       ? event.eventType === filters.eventType
       : true
     const matchesCategory = filters.category
-      ? event.category === filters.category
+      ? event.category.includes(filters.category)
       : true
+
+      const formattedDate = new Date(event.endDateTime)
+        .toISOString()
+        .split('T')[0]
+
     const matchesDate =
       (!filters.startDate ||
         new Date(event.startDateTime) >= new Date(filters.startDate)) &&
-      (!filters.endDate ||
-        new Date(event.endDateTime) <= new Date(filters.endDate))
+      (!filters.endDate || new Date(formattedDate) <= new Date(filters.endDate))
 
     return matchesSearch && matchesType && matchesCategory && matchesDate
   })
 
-  // Sort events
   filteredEvents = filteredEvents.sort((a, b) => {
     if (filters.sortBy === 'startDate') {
       return (
@@ -63,6 +65,7 @@ export default function EventTable({
             <TableCell>Start</TableCell>
             <TableCell>End</TableCell>
             <TableCell>Organizer</TableCell>
+            <TableCell>Category</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -87,6 +90,7 @@ export default function EventTable({
                   {new Date(event.endDateTime).toLocaleString()}
                 </TableCell>
                 <TableCell>{event.organizer}</TableCell>
+                 <TableCell>{event.category}</TableCell>
                 <TableCell>
                   <Button onClick={() => onEdit(event)}>Edit</Button>
                   <Button color='error' onClick={() => removeEvent(event.id)}>
