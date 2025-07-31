@@ -1,6 +1,6 @@
 'use client'
 
-import { AppBar, Avatar, Box, Button, MenuItem, TextField, Toolbar, Typography, useTheme } from '@mui/material'
+import { AppBar, Avatar, Box, Button, MenuItem, TextField, Toolbar, Typography } from '@mui/material'
 import EventCreateModalForm from '@/components/EventCreateModalForm'
 import Table from '@/components/Table'
 import {
@@ -22,7 +22,7 @@ function DashboardContent() {
 
 
   const handleLogout = () => {
-    clearSession() // Clear session (you should implement this in utils/auth)
+    clearSession() 
     router.replace('/login')
   }
 
@@ -43,7 +43,6 @@ function DashboardContent() {
           </Toolbar>
         </AppBar>
       )}
-      {/* Top Bar with Add Event Button */}
       <Box display='flex' justifyContent='flex-end' mb={2}>
         <Button
           variant='contained'
@@ -57,7 +56,6 @@ function DashboardContent() {
         </Button>
       </Box>
 
-      {/* Filters */}
       <Box
         display='flex'
         gap={1.5}

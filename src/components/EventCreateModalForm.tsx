@@ -61,11 +61,8 @@ export default function EventCreateFormModal({
         organizer: session?.name || 'Unknown',
       }
 
-      if (editEvent) {
-        updateIndividualEvent(eventData)
-      } else {
-        storeEvent(eventData)
-      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      editEvent ? updateIndividualEvent(eventData) : storeEvent(eventData)
       handleClose()
       formik.resetForm()
     },

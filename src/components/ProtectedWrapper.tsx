@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { latestCurrentSessionSession, clearSession } from '@/utils/auth'
+import { latestCurrentSessionSession } from '@/utils/auth'
 import {  Box } from '@mui/material'
 
 const publicRoutes = ['/login', '/signup']
@@ -26,9 +26,10 @@ export default function ProtectedRoute({
         router.replace('/login')
       }
     } else {
+      console.log('session......', { pathname })
       setSession(userSession)
-      if (publicRoutes.includes(pathname)) {
-        router.replace('/dashboard')
+      if (publicRoutes.includes(pathname) || pathname === '/') {
+        router.push('/dashboard')
       }
     }
 
