@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useFormik } from 'formik'
@@ -12,43 +13,34 @@ import {
 } from '@mui/material'
 import { AccountCircle, Email, Lock } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
+import { storeUser, loginAction } from '@/utils/auth'
 
-interface ValidatedFormProps {
+interface AuthFormProps {
   isSignup?: boolean
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   validationSchema: any
 }
 
 const ValidatedForm = ({
   isSignup = false,
   validationSchema,
-}: ValidatedFormProps) => {
+}: AuthFormProps) => {
   const router = useRouter()
 
   const formik = useFormik({
     initialValues: { name: '', email: '', password: '' },
     validationSchema,
     onSubmit: (values) => {
-      if (isSignup) {
-        localStorage.setItem('user', JSON.stringify(values))
-        alert('Signup successful! Please login.')
-        router.push('/login')
-      } else {
-        const storedUser = localStorage.getItem('user')
-        if (storedUser) {
-          const user = JSON.parse(storedUser)
-          if (
-            user.email === values.email &&
-            user.password === values.password
-          ) {
-            localStorage.setItem('isLoggedIn', 'true')
-            router.push('/dashboard')
-          } else {
-            alert('Invalid email or password')
-          }
+      try {
+        if (isSignup) {
+          storeUser(values)
+          alert('Signup successful! Please login.')
+          router.push('/login')
         } else {
-          alert('No user found. Please sign up first.')
+          loginAction(values.email, values.password)
+          router.push('/dashboard')
         }
+      } catch (err: any) {
+        alert(err.message)
       }
     },
   })
