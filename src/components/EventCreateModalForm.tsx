@@ -15,6 +15,7 @@ import { useEventManagementContext } from '@/context/EventHandlerContext'
 import { latestCurrentSessionSession } from '@/utils/auth'
 import { v4 as uuid } from 'uuid'
 import { useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 export default function EventCreateFormModal({
   open,
@@ -48,7 +49,9 @@ export default function EventCreateFormModal({
       })
 
       if (isOverlap) {
-        alert('Event overlaps with another event!')
+        toast( 'Event overlaps with another event!',{
+         type:'error'
+        })
         return
       }
 
@@ -58,7 +61,11 @@ export default function EventCreateFormModal({
         organizer: session?.name || 'Unknown',
       }
 
-      editEvent ? updateIndividualEvent(eventData) : storeEvent(eventData)
+      if (editEvent) {
+        updateIndividualEvent(eventData)
+      } else {
+        storeEvent(eventData)
+      }
       handleClose()
       formik.resetForm()
     },
@@ -86,8 +93,10 @@ export default function EventCreateFormModal({
           backgroundColor: 'white',
           borderRadius: 3,
           maxWidth: 500,
+           maxHeight: '100vh', 
+      overflowY: 'auto',
           mx: 'auto',
-          mt: 10,
+          mt: 2,
         }}
       >
         <Typography variant='h6' mb={2}>

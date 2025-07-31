@@ -14,6 +14,7 @@ import {
 import { AccountCircle, Email, Lock } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
 import { storeUser, loginAction } from '@/utils/auth'
+import { toast } from 'react-toastify'
 
 interface AuthFormProps {
   isSignup?: boolean
@@ -33,14 +34,18 @@ const ValidatedForm = ({
       try {
         if (isSignup) {
           storeUser(values)
-          alert('Signup successful! Please login.')
+          toast('Signup successful! Please login.',{
+            type: 'success',
+          })
           router.push('/login')
         } else {
           loginAction(values.email, values.password)
           router.push('/dashboard')
         }
       } catch (err: any) {
-        alert(err.message)
+        toast(err.message,{
+          type: 'error',
+        })
       }
     },
   })

@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { latestCurrentSessionSession } from '@/utils/auth'
+import { latestCurrentSessionSession, clearSession } from '@/utils/auth'
+import {  Box } from '@mui/material'
 
-const publicRoutes = ['/login', '/signup'] // Routes accessible without login
+const publicRoutes = ['/login', '/signup']
 
-export default function ProtectedWrapper({
+export default function ProtectedRoute({
   children,
 }: {
   children: React.ReactNode
@@ -14,17 +15,18 @@ export default function ProtectedWrapper({
   const router = useRouter()
   const pathname = usePathname()
   const [loading, setLoading] = useState(true)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [session, setSession] = useState<any>(null)
 
   useEffect(() => {
-    const session = latestCurrentSessionSession()
+    const userSession = latestCurrentSessionSession()
 
-    if (!session) {
-      // Not logged in or session expired
+    if (!userSession) {
       if (!publicRoutes.includes(pathname)) {
         router.replace('/login')
       }
     } else {
-      // Logged in
+      setSession(userSession)
       if (publicRoutes.includes(pathname)) {
         router.replace('/dashboard')
       }
@@ -33,7 +35,17 @@ export default function ProtectedWrapper({
     setLoading(false)
   }, [pathname, router])
 
-  if (loading) return null // or a spinner
+  
 
-  return <>{children}</>
+  if (loading) return null // Or a spinner
+
+  return (
+    <>
+      {/* Show header only if user is logged in */}
+      
+
+      {/* Page Content */}
+      <Box sx={{ mt: session ? 2 : 0 }}>{children}</Box>
+    </>
+  )
 }

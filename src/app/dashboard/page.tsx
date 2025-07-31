@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, MenuItem, TextField, useTheme } from '@mui/material'
+import { AppBar, Avatar, Box, Button, MenuItem, TextField, Toolbar, Typography, useTheme } from '@mui/material'
 import EventCreateModalForm from '@/components/EventCreateModalForm'
 import Table from '@/components/Table'
 import {
@@ -8,15 +8,41 @@ import {
   useEventManagementContext,
 } from '@/context/EventHandlerContext'
 import { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { clearSession } from '@/utils/auth'
 
 function DashboardContent() {
   const [modalOpen, setModalOpen] = useState(false)
   const [editEvent, setEditEvent] = useState(null)
   const { filters, setFilters } = useEventManagementContext()
-  const theme = useTheme()
+  const pathname = usePathname()
+   const router = useRouter()
+  const publicRoutes = ['/login', '/signup']
+  const session = JSON.parse(localStorage.getItem('user')??"{}")
+
+
+  const handleLogout = () => {
+    clearSession() // Clear session (you should implement this in utils/auth)
+    router.replace('/login')
+  }
+
 
   return (
     <Box p={4}>
+      { !publicRoutes.includes(pathname) && (
+        <AppBar position='static' sx={{ backgroundColor: '#1976d2',marginBottom:'10px' }}>
+          <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant='h6'>Event Manager</Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar src='/demo-profile.jpg' alt='User' />
+              <Typography>{ session?.name || 'User'}</Typography>
+              <Button color='inherit' onClick={handleLogout}>
+                Logout
+              </Button>
+            </Box>
+          </Toolbar>
+        </AppBar>
+      )}
       {/* Top Bar with Add Event Button */}
       <Box display='flex' justifyContent='flex-end' mb={2}>
         <Button

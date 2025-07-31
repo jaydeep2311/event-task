@@ -7,6 +7,7 @@ import {
   useEffect,
 } from 'react'
 import { latestCurrentSessionSession } from '@/utils/auth'
+import { toast } from 'react-toastify'
 
 export interface MyEventType {
   id: string
@@ -72,13 +73,26 @@ export const EventManagementProvider = ({
     setEventsData(newEvents)
   }
 
-  const storeEvent = (event: MyEventType) => storeEvents([...events, event])
-
+  const storeEvent = (event: MyEventType) =>{ 
+    storeEvents([...events, event]) 
+     toast('Event stored successfully!', {
+      type: 'success',
+  })
+  }
   const updateIndividualEvent = (event: MyEventType) =>
-    storeEvents(events.map((e) => (e.id === event.id ? event : e)))
+ {   storeEvents(events.map((e) => (e.id === event.id ? event : e)))
+  toast('Event updated successfully!', {
+    type: 'success',
+  })
+ }
 
   const removeEvent = (id: string) =>
-    storeEvents(events.filter((e) => e.id !== id))
+    { 
+      storeEvents(events.filter((e) => e.id !== id))
+    toast('Event deleted successfully!', {
+      type: 'success',
+    })
+    }
 
   const setFiltersAction = (updated: Partial<MyEventContextFilters>) => {
     setFiltersDataState((prev) => ({ ...prev, ...updated }))
