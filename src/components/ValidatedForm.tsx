@@ -57,7 +57,7 @@ const ValidatedForm = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
+        background: 'linear-gradient(135deg, #a78bfa 0%, #93c5fd 100%)',
         p: 2,
       }}
     >

@@ -28,8 +28,9 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <ToastContainer  />
         <ProtectedWrapper>
-          <ToastContainer />
+          
           <EventManagementProvider>{children} </EventManagementProvider>
         </ProtectedWrapper>
       </body>
