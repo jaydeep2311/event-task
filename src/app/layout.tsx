@@ -28,7 +28,12 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ToastContainer />
+        <ToastContainer
+          pauseOnFocusLoss={false}
+          autoClose={10000}
+          closeOnClick
+          hideProgressBar
+        />
         <ProtectedWrapper>
           <EventManagementProvider>{children} </EventManagementProvider>
         </ProtectedWrapper>

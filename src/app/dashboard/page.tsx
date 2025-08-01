@@ -1,6 +1,15 @@
 'use client'
 
-import { AppBar, Avatar, Box, Button, MenuItem, TextField, Toolbar, Typography } from '@mui/material'
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Button,
+  MenuItem,
+  TextField,
+  Toolbar,
+  Typography,
+} from '@mui/material'
 import EventCreateModalForm from '@/components/EventCreateModalForm'
 import Table from '@/components/Table'
 import {
@@ -8,7 +17,7 @@ import {
   useEventManagementContext,
 } from '@/context/EventHandlerContext'
 import { useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { clearSession } from '@/utils/auth'
 
 function DashboardContent() {
@@ -16,26 +25,26 @@ function DashboardContent() {
   const [editEvent, setEditEvent] = useState(null)
   const { filters, setFilters } = useEventManagementContext()
   const pathname = usePathname()
-   const router = useRouter()
   const publicRoutes = ['/login', '/signup']
-  const session = JSON.parse(localStorage.getItem('user')??"{}")
-
+  const session = JSON.parse(localStorage.getItem('user') ?? '{}')
 
   const handleLogout = () => {
-    clearSession() 
-    router.replace('/login')
+    clearSession()
+    window.location.assign('/login')
   }
-
 
   return (
     <Box p={4}>
-      { !publicRoutes.includes(pathname) && (
-        <AppBar position='static' sx={{ backgroundColor: '#1976d2',marginBottom:'10px' }}>
+      {!publicRoutes.includes(pathname) && (
+        <AppBar
+          position='static'
+          sx={{ backgroundColor: '#1976d2', marginBottom: '10px' }}
+        >
           <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant='h6'>Event Manager</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Avatar src='/demo-profile.jpg' alt='User' />
-              <Typography>{ session?.name || 'User'}</Typography>
+              <Typography>{session?.name || 'User'}</Typography>
               <Button color='inherit' onClick={handleLogout}>
                 Logout
               </Button>
